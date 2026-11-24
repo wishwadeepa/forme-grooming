@@ -7,7 +7,7 @@
   --olive: #666862;
   --line: rgba(32, 33, 31, .18);
   --gutter: clamp(22px, 6.25vw, 104px);
-  --display: "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
+  --display: "Avenir Next Condensed", "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
   --body: "DM Sans", "Helvetica Neue", Arial, sans-serif;
   --editorial: "Playfair Display", Georgia, serif;
 }
@@ -554,6 +554,20 @@ body:has(.not-found) > .site-footer { display: none; }
   .booking-service b { font-size: 14px; }
   .booking-service strong { font-size: 9px; }
   .date-option { flex-basis: 47px; }
+}
+@media (max-width: 760px) {
+  .hero-copy h1, .intro-grid h2, .craft-copy h2, .section-heading h2,
+  .gallery-preview-head h2, .studio-caption h2, .booking-cta h2,
+  .page-intro h1, .about-prose h2, .values-heading h2,
+  .booking-heading h1, .booking-confirmation h1, .not-found h1 {
+    letter-spacing: -.015em;
+  }
+  .hero-copy h1 em, .intro-grid h2 em, .craft-copy h2 em,
+  .section-heading h2 em, .gallery-preview-head h2 em,
+  .booking-cta h2 em, .page-intro h1 em, .about-prose h2 em,
+  .values-heading h2 em, .booking-heading h1 em, .booking-confirmation h1 em {
+    letter-spacing: -.02em;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

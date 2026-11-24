@@ -25,14 +25,14 @@ export function SiteHeader() {
         <nav className="desktop-nav" aria-label="Main navigation">
           {links.map((link) => <Link key={link.href} className={pathname === link.href ? "nav-link active" : "nav-link"} href={link.href}>{link.label}</Link>)}
         </nav>
-        <Link className="header-book" href="/booking">Book a visit <span aria-hidden="true">↗</span></Link>
+        <Link className="header-book" href="/booking">Book a visit <span aria-hidden="true">↗︎</span></Link>
         <button className="menu-toggle" type="button" aria-expanded={open} aria-controls="mobile-navigation" aria-label={open ? "Close menu" : "Open menu"} onClick={() => setOpen(!open)}>
           <span></span><span></span>
         </button>
       </div>
       <nav className={open ? "mobile-nav open" : "mobile-nav"} id="mobile-navigation" aria-label="Mobile navigation" aria-hidden={!open}>
-        {links.map((link, i) => <Link key={link.href} href={link.href} onClick={() => setOpen(false)}><span>0{i + 1}</span>{link.label}<b aria-hidden="true">↗</b></Link>)}
-        <Link className="mobile-book" href="/booking" onClick={() => setOpen(false)}>Book an appointment <span>↗</span></Link>
+        {links.map((link, i) => <Link key={link.href} href={link.href} onClick={() => setOpen(false)}><span>0{i + 1}</span>{link.label}<b aria-hidden="true">↗︎</b></Link>)}
+        <Link className="mobile-book" href="/booking" onClick={() => setOpen(false)}>Book an appointment <span>↗︎</span></Link>
       </nav>
     </header>
   );
@@ -47,7 +47,7 @@ export function SiteFooter() {
         <div className="footer-col"><span className="eyebrow">Find us</span><span>No. 42, Havelock Road</span><span>Colombo 05, Sri Lanka</span><a href="tel:+94112587642">+94 11 258 7642</a><a href="mailto:hello@forme.lk">hello@forme.lk</a></div>
         <div className="footer-col"><span className="eyebrow">Hours</span><span>Mon–Sat · 9:00–20:00</span><span>Sunday · 10:00–17:00</span><span className="footer-note">Walk-ins welcome, appointments preferred.</span></div>
       </div>
-      <div className="footer-bottom"><span>© {new Date().getFullYear()} FORME GROOMING STUDIO</span><span>COLOMBO 05, SRI LANKA</span><Link href="/contact">Get in touch ↗</Link></div>
+      <div className="footer-bottom"><span>© {new Date().getFullYear()} FORME GROOMING STUDIO</span><span>COLOMBO 05, SRI LANKA</span><Link href="/contact">Get in touch ↗︎</Link></div>
     </footer>
   );
 }
