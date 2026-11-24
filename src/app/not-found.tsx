@@ -1,5 +1,14 @@
 import Link from "next/link";
 
 export default function NotFound() {
-  return <main id="main-content" className="not-found"><span className="eyebrow">FORME / 404</span><p className="not-found-code">04 / 04</p><h1>That page<br /><em>isn’t here.</em></h1><p>Looks like this cut went a little too short. Let’s get you back to the studio.</p><Link className="button button-dark" href="/">Back to the home page <span>↗</span></Link></main>;
+  return (
+    <main id="main-content" className="not-found" aria-labelledby="not-found-title">
+      <div className="not-found-content">
+        <div className="not-found-code" aria-label="Error 404"><span /> <em>404</em> <span /></div>
+        <h1 id="not-found-title"><span>Out of</span><span>Shape.</span></h1>
+        <p className="not-found-message">The page you’re looking for<br />doesn’t exist.</p>
+        <Link className="not-found-return" href="/">Return to the studio <span aria-hidden="true">↗</span></Link>
+      </div>
+    </main>
+  );
 }

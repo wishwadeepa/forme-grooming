@@ -312,11 +312,99 @@ em { font-family: var(--editorial); font-weight: 400; letter-spacing: -.045em; }
 .map-label-b { left: 9%; top: 54%; }
 .map-caption { display: flex; justify-content: space-between; gap: 20px; padding-top: 14px; color: var(--olive); font-size: 8px; font-weight: 700; letter-spacing: .12em; line-height: 1.6; }
 .map-caption a { color: var(--ink); border-bottom: 1px solid var(--line); align-self: start; padding-bottom: 5px; }
-.not-found { min-height: 68vh; padding: 90px var(--gutter); }
-.not-found-code { margin-top: 75px; color: var(--bronze); font-size: 9px; letter-spacing: .15em; }
-.not-found h1 { margin: 24px 0; font: 900 clamp(72px,12vw,145px)/.77 var(--display); letter-spacing: -.06em; text-transform: uppercase; }
-.not-found h1 em { text-transform: none; }
-.not-found > p:not(.not-found-code) { max-width: 400px; margin-bottom: 25px; color: var(--olive); font: 16px/1.6 var(--editorial); }
+/* The custom 404 is art-directed as a full-bleed poster using the supplied
+   scissors photograph as its background layer. */
+body:has(.not-found) { background: #d7c1a7; }
+body:has(.not-found) > .site-header,
+body:has(.not-found) > .site-footer { display: none; }
+.not-found {
+  position: relative;
+  width: min(100%, 1086px);
+  aspect-ratio: 1086 / 1448;
+  margin-inline: auto;
+  overflow: hidden;
+  isolation: isolate;
+  background: #d7c1a7 url("/images/invalid_pages/404page.png") center / cover no-repeat;
+  color: #171715;
+}
+.not-found-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8.9% 7% 0;
+  text-align: center;
+}
+.not-found-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(19px, 4.7vw, 52px);
+  width: 100%;
+  margin: 0;
+  color: #171715;
+}
+.not-found-code span { display: block; width: 12%; max-width: 120px; height: 1px; background: currentColor; }
+.not-found-code em {
+  font: italic 500 clamp(25px, 4.2vw, 48px)/1 var(--editorial);
+  letter-spacing: .34em;
+  text-indent: .34em;
+}
+.not-found h1 {
+  display: flex;
+  flex-direction: column;
+  margin: 5.2% 0 3.5%;
+  font: 900 clamp(70px, 18.2vw, 205px)/.79 var(--display);
+  letter-spacing: -.065em;
+  text-transform: uppercase;
+}
+.not-found h1 span { display: block; }
+.not-found-message {
+  margin: 0;
+  font-size: clamp(8px, 1.03vw, 12px);
+  font-weight: 700;
+  line-height: 2.45;
+  letter-spacing: .31em;
+  text-transform: uppercase;
+}
+.not-found-return {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 2.2vw, 27px);
+  width: min(46%, 476px);
+  min-height: clamp(48px, 7.2vw, 78px);
+  margin-top: 4.3%;
+  padding: 12px 18px;
+  background: #171715;
+  color: #f2efe8;
+  font-size: clamp(8px, 1.45vw, 15px);
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  transition: background .2s, color .2s;
+}
+.not-found-return:hover { background: var(--bronze); color: #171715; }
+.not-found-return span { font-size: 1.3em; }
+@media (max-width: 760px) {
+  .not-found {
+    width: 100%;
+    min-height: 0;
+    aspect-ratio: 1086 / 1448;
+    margin-block: max(0px, calc((100svh - 133.34vw) / 2));
+    background-size: cover;
+  }
+  .not-found-content { padding-top: max(8.9%, 35px); }
+  .not-found h1 { font-size: clamp(69px, 18vw, 138px); }
+  .not-found-message { font-size: clamp(8px, 2.15vw, 11px); }
+  .not-found-return { width: min(52%, 300px); min-width: 190px; min-height: 49px; font-size: clamp(8px, 2vw, 11px); }
+}
+@media (max-width: 390px) {
+  .not-found h1 { font-size: 18.5vw; }
+  .not-found-message { letter-spacing: .22em; }
+  .not-found-return { width: min(58%, 240px); min-width: 180px; }
+}
 @keyframes hero-reveal { from { transform: scale(1.025); opacity: .7; } to { transform: scale(1); opacity: 1; } }
 @media (max-width: 980px) {
   :root { --gutter: 5vw; }
