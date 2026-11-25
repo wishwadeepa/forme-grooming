@@ -27,6 +27,30 @@ export function HomeMotion({ children }: { children: ReactNode }) {
 
     revealItems.forEach((item) => observer ? observer.observe(item) : item.classList.add("is-visible"));
 
+    const photoItems = Array.from(main.querySelectorAll<HTMLElement>("[data-home-photo-reveal]"));
+    let photoObserver: IntersectionObserver | null = null;
+    if (!reduceMotion && "IntersectionObserver" in window) {
+      photoObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const photo = entry.target as HTMLElement;
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.18) {
+            photo.classList.add("is-image-visible");
+          }
+
+          const bounds = entry.boundingClientRect;
+          const fullyOutside =
+            bounds.bottom <= 0 ||
+            bounds.top >= window.innerHeight ||
+            bounds.right <= 0 ||
+            bounds.left >= window.innerWidth;
+          if (fullyOutside) photo.classList.remove("is-image-visible");
+        });
+      }, { threshold: [0, 0.18] });
+      photoItems.forEach((photo) => photoObserver?.observe(photo));
+    } else {
+      photoItems.forEach((photo) => photo.classList.add("is-image-visible"));
+    }
+
     const hero = main.querySelector<HTMLElement>(".hero-premium");
     const cursor = cursorRef.current;
     const finePointer = window.matchMedia("(pointer: fine)").matches;
@@ -58,6 +82,7 @@ export function HomeMotion({ children }: { children: ReactNode }) {
 
     return () => {
       observer?.disconnect();
+      photoObserver?.disconnect();
       cancelAnimationFrame(frame);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("blur", clearCursor);

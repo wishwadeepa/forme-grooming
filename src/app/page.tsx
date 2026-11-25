@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { barbers } from "@/data/barbers/barbers";
+import { HeroMedia } from "@/components/home/hero-media";
 import { services, formatPrice } from "@/data/services";
 
 function ArrowUpRight() {
@@ -14,7 +15,7 @@ function ArrowDown() {
 export default function HomePage() {
   return <main id="main-content" className="home-redesign">
       <section className="home-hero hero-premium">
-        <Image src="/images/hero/hero_image.png" alt="A considered haircut in the FORME studio" fill priority sizes="100vw" className="hero-photo" />
+        <HeroMedia />
         <div className="hero-shade" />
         <div className="hero-grain" aria-hidden="true" />
         <div className="hero-light-pass" aria-hidden="true" />
@@ -61,7 +62,7 @@ export default function HomePage() {
 
       <section className="team-section section-wrap" data-reveal>
         <div className="section-heading"><div><span className="eyebrow">05 — The people</span><h2>Good hands.<br /><em>Good company.</em></h2></div><p className="section-note">Different perspectives, one shared respect for the craft.</p></div>
-        <div className="team-grid">{barbers.map((barber, i) => <article className="team-card" key={barber.id}><div className="team-photo" data-cursor="MEET"><Image src={barber.image} alt={`Barber ${barber.name}`} fill sizes="(max-width: 700px) 50vw, 25vw" /></div><div className="team-meta"><span>0{i + 1}</span><span>{barber.experience} experience</span></div><h3>{barber.name}</h3><p>{barber.specialty}</p></article>)}</div>
+        <div className="team-grid">{barbers.map((barber, i) => <article className="team-card" key={barber.id}><div className="team-photo" data-cursor="MEET" data-home-photo-reveal><Image src={barber.image} alt={`Barber ${barber.name}`} fill sizes="(max-width: 700px) 50vw, 25vw" /></div><div className="team-meta"><span>0{i + 1}</span><span>{barber.experience} experience</span></div><h3>{barber.name}</h3><p>{barber.specialty}</p></article>)}</div>
       </section>
 
       <section className="gallery-preview section-wrap" data-reveal>
