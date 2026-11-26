@@ -55,6 +55,8 @@ export function SiteMotion() {
     const getVisibilityThreshold = (target: HTMLElement, height: number, viewportHeight: number, viewportWidth: number) => {
       const isHome = Boolean(target.closest("main")?.classList.contains("home-redesign"));
       const isMobile = viewportWidth <= 760;
+      if (isHome && isMobile && target.classList.contains("motion-heading")) return 0.78;
+      if (isHome && isMobile && target.classList.contains("motion-image-reveal")) return 0.62;
       if (isHome) return 0.06;
       if (height > viewportHeight) return isMobile ? 0.62 : 0.68;
       if (target.classList.contains("motion-image-reveal")) return isMobile ? 0.62 : 0.72;
