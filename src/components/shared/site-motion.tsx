@@ -43,21 +43,33 @@ export function SiteMotion() {
       }
     };
 
-    const getVisibilityThreshold = (target: HTMLElement, height: number) => {
+    const getViewportBounds = () => {
+      const viewport = window.visualViewport;
+      const left = viewport?.offsetLeft ?? 0;
+      const top = viewport?.offsetTop ?? 0;
+      const width = viewport?.width ?? window.innerWidth;
+      const height = viewport?.height ?? window.innerHeight;
+      return { left, top, right: left + width, bottom: top + height, width, height };
+    };
+
+    const getVisibilityThreshold = (target: HTMLElement, height: number, viewportHeight: number, viewportWidth: number) => {
       const isHome = Boolean(target.closest("main")?.classList.contains("home-redesign"));
+      const isMobile = viewportWidth <= 760;
       if (isHome) return 0.06;
-      if (height > window.innerHeight) return 0.68;
-      if (target.classList.contains("motion-image-reveal")) return 0.72;
-      if (target.classList.contains("motion-heading") || target.classList.contains("motion-value-item")) return 0.88;
-      return 0.96;
+      if (height > viewportHeight) return isMobile ? 0.62 : 0.68;
+      if (target.classList.contains("motion-image-reveal")) return isMobile ? 0.62 : 0.72;
+      if (target.classList.contains("motion-heading") || target.classList.contains("motion-value-item")) return isMobile ? 0.78 : 0.88;
+      if (target.classList.contains("motion-copy") || target.classList.contains("motion-quote")) return isMobile ? 0.84 : 0.96;
+      return isMobile ? 0.84 : 0.96;
     };
 
     const scheduleMotionCheck = () => {
       if (reduceMotion || motionCheckFrame) return;
       motionCheckFrame = window.requestAnimationFrame(() => {
         motionCheckFrame = 0;
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
+        const viewport = getViewportBounds();
+        const viewportWidth = viewport.width;
+        const viewportHeight = viewport.height;
         motionTargets.forEach((target) => {
           if (!target.isConnected) {
             motionTargets.delete(target);
@@ -65,7 +77,7 @@ export function SiteMotion() {
             return;
           }
           const bounds = target.getBoundingClientRect();
-          const fullyOutside = bounds.bottom <= 0 || bounds.top >= viewportHeight || bounds.right <= 0 || bounds.left >= viewportWidth;
+          const fullyOutside = bounds.bottom <= viewport.top || bounds.top >= viewport.bottom || bounds.right <= viewport.left || bounds.left >= viewport.right;
           if (fullyOutside) {
             target.classList.remove("is-visible");
             cancelPendingReveal(target);
@@ -73,10 +85,10 @@ export function SiteMotion() {
           }
           if (target.classList.contains("is-visible")) return;
 
-          const visibleWidth = Math.max(0, Math.min(bounds.right, viewportWidth) - Math.max(bounds.left, 0));
-          const visibleHeight = Math.max(0, Math.min(bounds.bottom, viewportHeight) - Math.max(bounds.top, 0));
+          const visibleWidth = Math.max(0, Math.min(bounds.right, viewport.right) - Math.max(bounds.left, viewport.left));
+          const visibleHeight = Math.max(0, Math.min(bounds.bottom, viewport.bottom) - Math.max(bounds.top, viewport.top));
           const visibleRatio = (visibleWidth * visibleHeight) / Math.max(bounds.width * bounds.height, 1);
-          if (visibleRatio < getVisibilityThreshold(target, bounds.height)) return;
+          if (visibleRatio < getVisibilityThreshold(target, bounds.height, viewportHeight, viewportWidth)) return;
 
           if (target.classList.contains("motion-copy") || target.classList.contains("motion-wipe-group")) {
             if (pendingRevealFrames.has(target)) return;
@@ -85,10 +97,11 @@ export function SiteMotion() {
                 pendingRevealFrames.delete(target);
                 if (!target.isConnected) return;
                 const currentBounds = target.getBoundingClientRect();
-                const currentWidth = Math.max(0, Math.min(currentBounds.right, window.innerWidth) - Math.max(currentBounds.left, 0));
-                const currentHeight = Math.max(0, Math.min(currentBounds.bottom, window.innerHeight) - Math.max(currentBounds.top, 0));
+                const currentViewport = getViewportBounds();
+                const currentWidth = Math.max(0, Math.min(currentBounds.right, currentViewport.right) - Math.max(currentBounds.left, currentViewport.left));
+                const currentHeight = Math.max(0, Math.min(currentBounds.bottom, currentViewport.bottom) - Math.max(currentBounds.top, currentViewport.top));
                 const currentRatio = (currentWidth * currentHeight) / Math.max(currentBounds.width * currentBounds.height, 1);
-                if (currentRatio >= getVisibilityThreshold(target, currentBounds.height)) target.classList.add("is-visible");
+                if (currentRatio >= getVisibilityThreshold(target, currentBounds.height, currentViewport.height, currentViewport.width)) target.classList.add("is-visible");
               });
               pendingRevealFrames.set(target, secondFrame);
             });
@@ -102,6 +115,8 @@ export function SiteMotion() {
 
     window.addEventListener("scroll", scheduleMotionCheck, { passive: true });
     window.addEventListener("resize", scheduleMotionCheck, { passive: true });
+    window.visualViewport?.addEventListener("resize", scheduleMotionCheck, { passive: true });
+    window.visualViewport?.addEventListener("scroll", scheduleMotionCheck, { passive: true });
 
     const prepareTargets = (main: HTMLElement, isHome: boolean, reset = false) => {
       if (reset) {
@@ -225,6 +240,8 @@ export function SiteMotion() {
       pageChanges.disconnect();
       window.removeEventListener("scroll", scheduleMotionCheck);
       window.removeEventListener("resize", scheduleMotionCheck);
+      window.visualViewport?.removeEventListener("resize", scheduleMotionCheck);
+      window.visualViewport?.removeEventListener("scroll", scheduleMotionCheck);
       if (motionCheckFrame) window.cancelAnimationFrame(motionCheckFrame);
       pendingRevealFrames.forEach((frame) => window.cancelAnimationFrame(frame));
       pendingRevealFrames.clear();
