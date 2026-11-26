@@ -128,7 +128,7 @@ export function SiteMotion() {
           element.style.removeProperty("--motion-order");
           element.style.removeProperty("--intro-order");
         });
-        main.querySelectorAll<HTMLElement>(".motion-quote").forEach((element) => {
+        main.querySelectorAll<HTMLElement>(".motion-quote, .motion-wipe-group").forEach((element) => {
           element.classList.remove("is-visible");
         });
         main.querySelectorAll<HTMLElement>(".motion-copy").forEach((element) => {
